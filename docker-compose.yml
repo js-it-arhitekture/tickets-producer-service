@@ -9,10 +9,10 @@ services:
       - '8080:8080'
       - '9000:9000'
     depends_on:
-      - mongodb
+      - db-ticket-purchase
       - activemq-artemis
     environment:
-      - QUARKUS_MONGODB_CONNECTION_STRING=mongodb://mongodb:27017
+      - QUARKUS_MONGODB_CONNECTION_STRING=mongodb://db-ticket-purchase:27017/ticketPurchase
       - QUARKUS_MONGODB_DATABASE=ticketPurchase
       - QUARKUS_QPID_JMS_URL=amqp://activemq-artemis:5672
       - QUARKUS_QPID_JMS_USERNAME=quarkus
