@@ -8,11 +8,10 @@ services:
     ports:
       - '8080:8080'
       - '9000:9000'
-    links:
-      - db-ticket-purchase
+    depends_on:
+      - mongodb
       - activemq-artemis
     environment:
-      - QUARKUS_DATASOURCE_REACTIVE_URL=vertx-reactive:postgresql://db-ticket-purchase:5432/ticket_purchase
       - QUARKUS_MONGODB_CONNECTION_STRING=mongodb://mongodb:27017
       - QUARKUS_MONGODB_DATABASE=ticketPurchase
       - QUARKUS_QPID_JMS_URL=amqp://activemq-artemis:5672
@@ -22,15 +21,10 @@ services:
       - quarkus
 
   db-ticket-purchase:
-    image: postgres
+    image: mongo
     container_name: "db-ticket-purchase"
-    restart: always
-    environment:
-      - POSTGRES_USER=postgres
-      - POSTGRES_PASSWORD=password
-      - POSTGRES_DB=ticket_purchase
     ports:
-      - '5432:5432'
+      - '27017:27017'
     networks:
       - quarkus
 
@@ -45,14 +39,6 @@ services:
       - AMQ_USER=quarkus
       - AMQ_PASSWORD=quarkus
       - AMQ_EXTRA_ARGS=--relax-jolokia
-    networks:
-      - quarkus
-
-  mongodb:
-    image: mongo
-    container_name: mongodb
-    ports:
-      - "27017:27017"
     networks:
       - quarkus
 
