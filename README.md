@@ -1,5 +1,7 @@
 # tickets_provider_service
 
+This service will be used to add bought tickets to db. It will use activemq as a messaging service
+
 This project uses Quarkus, the Supersonic Subatomic Java Framework.
 
 If you want to learn more about Quarkus, please visit its website: https://quarkus.io/ .
