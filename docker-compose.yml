@@ -4,13 +4,9 @@ services:
   ticket_purchase_service:
     build:
       context: .
-      dockerfile: src/main/docker/Dockerfile.jvm
-    ports:
-      - '8080:8080'
-      - '9000:9000'
-    depends_on:
-      - db-ticket-purchase
-      - activemq-artemis
+      dockerfile: Dockerfile
+    container_name: "ticket_purchase_service"
+
     environment:
       - QUARKUS_MONGODB_CONNECTION_STRING=mongodb://db-ticket-purchase:27017/ticketPurchase
       - QUARKUS_MONGODB_DATABASE=ticketPurchase
@@ -19,12 +15,19 @@ services:
       - QUARKUS_QPID_JMS_PASSWORD=quarkus
     networks:
       - quarkus
+    ports:
+      - '8083:8080'
+    depends_on:
+      - db-ticket-purchase
+      - activemq-artemis
 
   db-ticket-purchase:
     image: mongo
     container_name: "db-ticket-purchase"
     ports:
       - '27017:27017'
+    volumes:
+      - mongodb_data:/data/db
     networks:
       - quarkus
 
@@ -45,3 +48,6 @@ services:
 networks:
   quarkus:
     driver: bridge
+
+volumes:
+  mongodb_data:

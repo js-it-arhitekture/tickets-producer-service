@@ -14,9 +14,10 @@ import jakarta.ws.rs.core.Response;
 import org.bson.types.ObjectId;
 import org.jboss.logging.Logger;
 
-@Path("/purchase")
+@Path("/api/purchases")
 @ApplicationScoped
-
+@Produces(MediaType.APPLICATION_JSON)
+@Consumes(MediaType.APPLICATION_JSON)
 public class TicketPurchaseResource {
 
     private static final Logger LOG = Logger.getLogger(TicketPurchaseResource.class.getName());
@@ -58,18 +59,14 @@ public class TicketPurchaseResource {
     }
 
 
-
     @GET
-    @Produces(MediaType.APPLICATION_JSON)
     public Multi<Response> getAllPurchases() {
-        LOG.info("getting all ticket purchases");
-        return Multi.createFrom().emitter(emitter -> {
-            ticketPurchaseRepository.listAll()
-                    .onItem().transform(purchases -> Response.ok(purchases).build())
-                    .onFailure().recoverWithItem(error -> Response.status(Response.Status.INTERNAL_SERVER_ERROR)
-                            .entity("Error retrieving ticket purchases: " + error.getMessage())
-                            .build());
-        });
+        LOG.info("Getting all ticket purchases");
+        return ticketPurchaseRepository.listAll()
+                .onItem().transform(purchases -> Response.ok(purchases).build())
+                .onFailure().recoverWithItem(error -> Response.status(Response.Status.INTERNAL_SERVER_ERROR)
+                        .entity("Error retrieving ticket purchases: " + error.getMessage())
+                        .build()).toMulti();
     }
 
     @GET
@@ -99,7 +96,7 @@ public class TicketPurchaseResource {
     @Path("/test")
     @Produces(MediaType.TEXT_PLAIN)
     public String getTstOutput(){
-        return "welcome to test";
+        return "welcome to test2";
     }
 
     @GET
