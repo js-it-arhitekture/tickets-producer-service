@@ -11,12 +11,7 @@ release.properties
 .settings/
 bin/
 
-target/
-
-# do not include this folders in gitignore because they are need to build the docker img
-!/target/quarkus-app/lib/
-!/target/quarkus-app/app/
-!/target/quarkus-app/quarkus/
+/target/
 
 # IntelliJ
 .idea

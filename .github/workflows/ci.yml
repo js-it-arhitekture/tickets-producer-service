@@ -26,6 +26,10 @@ jobs:
 
       - name: Run Maven Tests
         run: mvn test --file pom.xml
+
+      - name: Build Maven Artifacts
+        run: mvn package --file pom.xml      
+      
       - name: Login to DockerHub and push image
         run: |
           docker login -u $DOCKER_USERNAME --password-stdin <<< $DOCKER_PASSWORD
