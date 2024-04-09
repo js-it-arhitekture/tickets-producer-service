@@ -1,12 +1,11 @@
 version: "3.9"
 
 services:
-  ticket_purchase_service:
+  tickets_provider_service:
     build:
       context: .
       dockerfile: Dockerfile
-    container_name: "ticket_purchase_service"
-
+    container_name: tickets_provider_service
     environment:
       - QUARKUS_MONGODB_CONNECTION_STRING=mongodb://db-ticket-purchase:27017/ticketPurchase
       - QUARKUS_MONGODB_DATABASE=ticketPurchase
@@ -14,40 +13,40 @@ services:
       - QUARKUS_QPID_JMS_USERNAME=quarkus
       - QUARKUS_QPID_JMS_PASSWORD=quarkus
     networks:
-      - quarkus
-    ports:
-      - '8083:8080'
+      - backend-network
     depends_on:
       - db-ticket-purchase
       - activemq-artemis
+    ports:
+      - "8084:8084" 
 
   db-ticket-purchase:
     image: mongo
-    container_name: "db-ticket-purchase"
+    container_name: db-ticket-purchase
     ports:
       - '27017:27017'
     volumes:
       - mongodb_data:/data/db
     networks:
-      - quarkus
+      - backend-network
 
   activemq-artemis:
     image: quay.io/artemiscloud/activemq-artemis-broker:1.0.25
     container_name: activemq-artemis
     ports:
-      - "8161:8161"
       - "61616:61616"
+      - "8161:8161"
       - "5672:5672"
     environment:
       - AMQ_USER=quarkus
       - AMQ_PASSWORD=quarkus
       - AMQ_EXTRA_ARGS=--relax-jolokia
     networks:
-      - quarkus
-
-networks:
-  quarkus:
-    driver: bridge
+      - backend-network
 
 volumes:
   mongodb_data:
+
+networks:
+  backend-network:
+    external: true

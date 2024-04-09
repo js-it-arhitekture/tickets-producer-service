@@ -11,7 +11,7 @@ COPY target/quarkus-app/app/ /app/app/
 COPY target/quarkus-app/quarkus/ /app/quarkus/
 
 # Izpostavite port, na katerem bo aplikacija dostopna
-EXPOSE 8080
+EXPOSE 8084
 
 # Zagon aplikacije s pomočjo Java naredi, z opcijami, ki so potrebne za Quarkus
-CMD ["java", "-Dquarkus.http.port=8080", "-jar", "/app/quarkus-run.jar"]
+CMD ["java", "-Dquarkus.http.port=8084", "-jar", "/app/quarkus-run.jar"]
